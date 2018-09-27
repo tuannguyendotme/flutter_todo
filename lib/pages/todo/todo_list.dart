@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TodoListPage extends StatelessWidget {
+class TodoListPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return TodoListPageState();
+  }
+}
+
+class TodoListPageState extends State<TodoListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
