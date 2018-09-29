@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_todo/models/Priority.dart';
+import 'package:flutter_todo/models/priority.dart';
 
 class Todo {
   final String title;
