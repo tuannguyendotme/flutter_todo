@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
+import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
 import 'package:flutter_todo/widgets/todo/todo_list_view.dart';
 
 class TodoListPage extends StatefulWidget {
@@ -43,7 +44,14 @@ class TodoListPageState extends State<TodoListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TodoEditorPage(null),
+            ),
+          );
+        },
       ),
       body: Center(
         child: TodoListView(todos),

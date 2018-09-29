@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
+import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
 
 class TodoCard extends StatelessWidget {
   final Todo todo;
@@ -48,7 +49,14 @@ class TodoCard extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TodoEditorPage(todo),
+                ),
+              );
+            },
           )
         ],
       ),
