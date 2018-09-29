@@ -16,7 +16,14 @@ class TodoListView extends StatelessWidget {
       todoCards = ListView.builder(
         itemCount: todos.length,
         itemBuilder: (BuildContext context, int index) {
-          return TodoCard(todos[index]);
+          Todo todo = todos[index];
+
+          return Dismissible(
+            key: Key(todo.id),
+            onDismissed: (DismissDirection direction) {},
+            child: TodoCard(todo),
+            background: Container(color: Colors.red),
+          );
         },
       );
     } else {

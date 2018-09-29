@@ -19,13 +19,18 @@ class TodoListPageState extends State<TodoListPage> {
   void initState() {
     setState(() {
       todos = [
-        Todo(title: 'Todo 01'),
         Todo(
+          id: '1',
+          title: 'Todo 01',
+        ),
+        Todo(
+          id: '2',
           title: 'Todo 02',
           content: 'Todo 02 Content',
           priority: Priority.Medium,
         ),
         Todo(
+          id: '3',
           title: 'Todo 03',
           content: 'Todo 03 Content',
           priority: Priority.High,
