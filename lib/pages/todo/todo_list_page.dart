@@ -1,46 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_todo/models/priority.dart';
-import 'package:flutter_todo/models/todo.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
+import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/widgets/todo/todo_list_view.dart';
 
 class TodoListPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return TodoListPageState();
+    return _TodoListPageState();
   }
 }
 
-class TodoListPageState extends State<TodoListPage> {
-  List<Todo> todos = [];
-
-  @override
-  void initState() {
-    setState(() {
-      todos = [
-        Todo(
-          id: '1',
-          title: 'Todo 01',
-        ),
-        Todo(
-          id: '2',
-          title: 'Todo 02',
-          content: 'Todo 02 Content',
-          priority: Priority.Medium,
-        ),
-        Todo(
-          id: '3',
-          title: 'Todo 03',
-          content: 'Todo 03 Content',
-          priority: Priority.High,
-        ),
-      ];
-    });
-
-    super.initState();
-  }
-
+class _TodoListPageState extends State<TodoListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +32,11 @@ class TodoListPageState extends State<TodoListPage> {
         },
       ),
       body: Center(
-        child: TodoListView(todos),
+        child: ScopedModelDescendant(
+          builder: (BuildContext context, Widget child, AppModel model) {
+            return TodoListView(model.todos, model.removeTodo);
+          },
+        ),
       ),
     );
   }

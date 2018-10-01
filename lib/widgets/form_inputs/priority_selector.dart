@@ -11,11 +11,11 @@ class PrioritySelector extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return PrioritySelectorState();
+    return _PrioritySelectorState();
   }
 }
 
-class PrioritySelectorState extends State<PrioritySelector> {
+class _PrioritySelectorState extends State<PrioritySelector> {
   Priority priority;
 
   @override
