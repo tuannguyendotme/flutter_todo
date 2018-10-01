@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
 import 'package:flutter_todo/widgets/form_inputs/priority_selector.dart';
 
@@ -7,7 +9,9 @@ class TodoEditorPage extends StatelessWidget {
 
   TodoEditorPage(this.todo);
 
-  _selectPriority() {}
+  _selectPriority(Priority priority) {
+    print(priority);
+  }
 
   @override
   Widget build(BuildContext context) {

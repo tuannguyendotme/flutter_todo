@@ -16,21 +16,39 @@ class PrioritySelector extends StatefulWidget {
 }
 
 class PrioritySelectorState extends State<PrioritySelector> {
+  Priority priority;
+
+  @override
+  void initState() {
+    priority = widget.initialPriority;
+
+    super.initState();
+  }
+
   Widget _buildItems() {
     List<Container> items = new List<Container>();
 
-    Priority.values.forEach((priority) {
-      Color priorityColor = PriorityHelper.buildPriorityColor(priority);
+    Priority.values.forEach((priorityValue) {
+      Color priorityColor = PriorityHelper.buildPriorityColor(priorityValue);
 
       items.add(Container(
-        color: priorityColor,
-        width: 60.0,
         height: 60.0,
-        child: widget.initialPriority == priority ? Icon(Icons.check) : null,
+        child: FlatButton(
+          color: priorityColor,
+          child: priority == priorityValue ? Icon(Icons.check) : null,
+          onPressed: () {
+            setState(() {
+              priority = priorityValue;
+            });
+
+            widget.setPriority(priority);
+          },
+        ),
       ));
     });
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: items,
     );
   }
