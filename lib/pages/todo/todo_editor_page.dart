@@ -42,7 +42,10 @@ class TodoEditorPage extends StatelessWidget {
                 SizedBox(
                   height: 12.0,
                 ),
-                PrioritySelector(todo.priority, _selectPriority)
+                PrioritySelector(
+                  todo != null ? todo.priority : Priority.Low,
+                  _selectPriority,
+                )
               ],
             ),
           ),
