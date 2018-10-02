@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
-import 'package:flutter_todo/models/todo.dart';
+import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/widgets/form_inputs/priority_selector.dart';
@@ -31,7 +31,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppModel>(
       builder: (BuildContext context, Widget child, AppModel model) {
-        return Scaffold(
+        Widget pageContent = Scaffold(
           appBar: AppBar(
             title: Text('Todo'),
           ),
@@ -44,22 +44,38 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
 
               _formKey.currentState.save();
 
-              String id =
-                  model.currentTodo != null ? model.currentTodo.id : '4';
-              Todo todo = Todo(
-                id: id,
-                title: _formData['title'],
-                content: _formData['content'],
-                priority: _formData['priority'],
-              );
-
               if (model.currentTodo != null) {
-                model.updateTodo(todo);
+                // model.updateTodo(todo);
+                Navigator.pop(context);
               } else {
-                model.createTodo(todo);
+                model
+                    .createTodo(
+                  _formData['title'],
+                  _formData['content'],
+                  _formData['priority'],
+                )
+                    .then((bool success) {
+                  if (success) {
+                    Navigator.pop(context);
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Something went wrong'),
+                          content: Text('Please try again!'),
+                          actions: <Widget>[
+                            FlatButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('Okay'),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  }
+                });
               }
-
-              Navigator.pop(context);
             },
           ),
           body: Container(
@@ -108,6 +124,16 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
             ),
           ),
         );
+
+        Stack mainStack = Stack(
+          children: <Widget>[pageContent],
+        );
+
+        if (model.isLoading) {
+          mainStack.children.add(LoadingModal());
+        }
+
+        return mainStack;
       },
     );
   }
