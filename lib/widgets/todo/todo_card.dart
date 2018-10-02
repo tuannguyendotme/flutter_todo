@@ -16,7 +16,7 @@ class TodoCard extends StatelessWidget {
         children: <Widget>[
           Container(
             decoration: new BoxDecoration(
-              color: PriorityHelper.buildPriorityColor(todo.priority),
+              color: PriorityHelper.getPriorityColor(todo.priority),
               borderRadius: new BorderRadius.only(
                 topLeft: const Radius.circular(4.0),
                 bottomLeft: const Radius.circular(4.0),

@@ -62,6 +62,9 @@ class AppModel extends Model {
     );
 
     if (response.statusCode != 200 && response.statusCode != 201) {
+      _isLoading = false;
+      notifyListeners();
+
       return false;
     }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/widgets/helpers/error_dialog.dart';
 import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/models/priority.dart';
@@ -58,21 +59,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                   if (success) {
                     Navigator.pop(context);
                   } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Something went wrong'),
-                          content: Text('Please try again!'),
-                          actions: <Widget>[
-                            FlatButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: Text('Okay'),
-                            )
-                          ],
-                        );
-                      },
-                    );
+                    ErrorDialog.show(context);
                   }
                 });
               }

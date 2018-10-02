@@ -29,7 +29,7 @@ class _PrioritySelectorState extends State<PrioritySelector> {
     List<Container> items = new List<Container>();
 
     Priority.values.forEach((priorityValue) {
-      Color priorityColor = PriorityHelper.buildPriorityColor(priorityValue);
+      Color priorityColor = PriorityHelper.getPriorityColor(priorityValue);
 
       items.add(Container(
         height: 60.0,
