@@ -5,9 +5,10 @@ import 'package:flutter_todo/widgets/todo/todo_card.dart';
 
 class TodoListView extends StatelessWidget {
   final List<Todo> _todos;
+  final Function _setCurrentTodo;
   final Function _removeTodo;
 
-  TodoListView(this._todos, this._removeTodo);
+  TodoListView(this._todos, this._setCurrentTodo, this._removeTodo);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class TodoListView extends StatelessWidget {
             onDismissed: (DismissDirection direction) {
               _removeTodo(todo.id);
             },
-            child: TodoCard(todo),
+            child: TodoCard(todo, _setCurrentTodo),
             background: Container(color: Colors.red),
           );
         },

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_todo/models/todo.dart';
-import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
 import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 
 class TodoCard extends StatelessWidget {
   final Todo todo;
+  final Function setCurrentTodo;
 
-  TodoCard(this.todo);
+  TodoCard(this.todo, this.setCurrentTodo);
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +37,9 @@ class TodoCard extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TodoEditorPage(todo),
-                ),
-              );
+              setCurrentTodo(todo);
+
+              Navigator.pushNamed(context, '/editor');
             },
           )
         ],

@@ -22,12 +22,21 @@ class AppModel extends Model {
       priority: Priority.High,
     ),
   ];
+  Todo _todo;
 
   List<Todo> get todos {
     return List.from(_todos);
   }
 
-  void addTodo(Todo todo) {
+  Todo get currentTodo {
+    return _todo;
+  }
+
+  void setCurrentTodo(Todo todo) {
+    _todo = todo;
+  }
+
+  void createTodo(Todo todo) {
     _todos.add(todo);
 
     notifyListeners();

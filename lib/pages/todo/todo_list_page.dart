@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
-import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
-import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/widgets/todo/todo_list_view.dart';
+import 'package:flutter_todo/scoped_models/app_model.dart';
 
 class TodoListPage extends StatefulWidget {
   @override
@@ -16,28 +15,29 @@ class TodoListPage extends StatefulWidget {
 class _TodoListPageState extends State<TodoListPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TodoEditorPage(null),
+    return ScopedModelDescendant<AppModel>(
+      builder: (BuildContext context, Widget child, AppModel model) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Todo'),
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              model.setCurrentTodo(null);
+
+              Navigator.pushNamed(context, '/editor');
+            },
+          ),
+          body: Center(
+            child: TodoListView(
+              model.todos,
+              model.setCurrentTodo,
+              model.removeTodo,
             ),
-          );
-        },
-      ),
-      body: Center(
-        child: ScopedModelDescendant(
-          builder: (BuildContext context, Widget child, AppModel model) {
-            return TodoListView(model.todos, model.removeTodo);
-          },
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
