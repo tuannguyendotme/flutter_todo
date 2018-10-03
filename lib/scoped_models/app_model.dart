@@ -8,24 +8,7 @@ import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
 
 class AppModel extends Model {
-  final List<Todo> _todos = [
-    Todo(
-      id: '1',
-      title: 'Todo 01',
-    ),
-    Todo(
-      id: '2',
-      title: 'Todo 02',
-      content: 'Todo 02 Content',
-      priority: Priority.Medium,
-    ),
-    Todo(
-      id: '3',
-      title: 'Todo 03',
-      content: 'Todo 03 Content',
-      priority: Priority.High,
-    ),
-  ];
+  final List<Todo> _todos = [];
   Todo _todo;
   bool _isLoading = false;
 
@@ -43,6 +26,49 @@ class AppModel extends Model {
 
   void setCurrentTodo(Todo todo) {
     _todo = todo;
+  }
+
+  Future<Null> fetchTodos() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final http.Response response = await http
+          .get('https://flutter-todo-ca169.firebaseio.com/todos.json');
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+
+        return;
+      }
+
+      final Map<String, dynamic> todoListData = json.decode(response.body);
+
+      if (todoListData == null) {
+        _isLoading = false;
+        notifyListeners();
+
+        return;
+      }
+
+      todoListData.forEach((String todoId, dynamic todoData) {
+        final Todo todo = Todo(
+          id: todoId,
+          title: todoData['title'],
+          content: todoData['content'],
+          priority: Priority.High,
+        );
+
+        _todos.add(todo);
+      });
+
+      _isLoading = false;
+      notifyListeners();
+    } catch (error) {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<bool> createTodo(

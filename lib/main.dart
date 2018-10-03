@@ -21,12 +21,12 @@ class TodoApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         routes: {
-          '/': (BuildContext context) => TodoListPage(),
+          '/': (BuildContext context) => TodoListPage(_model),
           '/editor': (BuildContext context) => TodoEditorPage(),
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-            builder: (BuildContext context) => TodoListPage(),
+            builder: (BuildContext context) => TodoListPage(_model),
           );
         },
       ),
