@@ -15,4 +15,9 @@ class PriorityHelper {
         return Colors.lightGreen;
     }
   }
+
+  static Priority toPriority(String value) {
+    return Priority.values
+        .firstWhere((priority) => priority.toString() == value);
+  }
 }

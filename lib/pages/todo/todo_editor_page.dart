@@ -46,8 +46,19 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
               _formKey.currentState.save();
 
               if (model.currentTodo != null) {
-                // model.updateTodo(todo);
-                Navigator.pop(context);
+                model
+                    .updateTodo(
+                  _formData['title'],
+                  _formData['content'],
+                  _formData['priority'],
+                )
+                    .then((bool success) {
+                  if (success) {
+                    Navigator.pop(context);
+                  } else {
+                    ErrorDialog.show(context);
+                  }
+                });
               } else {
                 model
                     .createTodo(

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
 
@@ -57,7 +58,7 @@ class AppModel extends Model {
           id: todoId,
           title: todoData['title'],
           content: todoData['content'],
-          priority: Priority.High,
+          priority: PriorityHelper.toPriority(todoData['priority']),
         );
 
         _todos.add(todo);
@@ -117,11 +118,49 @@ class AppModel extends Model {
     }
   }
 
-  void updateTodo(Todo todo) {
-    int todoIndex = _todos.indexWhere((t) => t.id == todo.id);
-    _todos[todoIndex] = todo;
-
+  Future<bool> updateTodo(
+      String title, String content, Priority priority) async {
+    _isLoading = true;
     notifyListeners();
+
+    final Map<String, dynamic> formData = {
+      'title': title,
+      'content': content,
+      'priority': priority.toString()
+    };
+
+    try {
+      final http.Response response = await http.put(
+        'https://flutter-todo-ca169.firebaseio.com/todos/${currentTodo.id}.json',
+        body: json.encode(formData),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+
+        return false;
+      }
+
+      Todo todo = Todo(
+        id: currentTodo.id,
+        title: title,
+        content: content,
+        priority: priority,
+      );
+      int todoIndex = _todos.indexWhere((t) => t.id == currentTodo.id);
+      _todos[todoIndex] = todo;
+
+      _isLoading = false;
+      notifyListeners();
+
+      return true;
+    } catch (error) {
+      _isLoading = false;
+      notifyListeners();
+
+      return false;
+    }
   }
 
   void removeTodo(String id) {
