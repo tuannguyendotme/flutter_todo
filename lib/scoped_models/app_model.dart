@@ -56,32 +56,39 @@ class AppModel extends Model {
       'priority': priority.toString()
     };
 
-    final http.Response response = await http.post(
-      'https://flutter-todo-ca169.firebaseio.com/todos.json',
-      body: json.encode(formData),
-    );
+    try {
+      final http.Response response = await http.post(
+        'https://flutter-todo-ca169.firebaseio.com/todos.json',
+        body: json.encode(formData),
+      );
 
-    if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+
+        return false;
+      }
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      Todo todo = Todo(
+        id: responseData['name'],
+        title: title,
+        content: content,
+        priority: priority,
+      );
+      _todos.add(todo);
+
+      _isLoading = false;
+      notifyListeners();
+
+      return true;
+    } catch (error) {
       _isLoading = false;
       notifyListeners();
 
       return false;
     }
-
-    final Map<String, dynamic> responseData = json.decode(response.body);
-
-    Todo todo = Todo(
-      id: responseData['name'],
-      title: title,
-      content: content,
-      priority: priority,
-    );
-    _todos.add(todo);
-
-    _isLoading = false;
-    notifyListeners();
-
-    return true;
   }
 
   void updateTodo(Todo todo) {
