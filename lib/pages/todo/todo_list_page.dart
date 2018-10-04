@@ -42,11 +42,7 @@ class _TodoListPageState extends State<TodoListPage> {
             },
           ),
           body: Center(
-            child: TodoListView(
-              model.todos,
-              model.setCurrentTodo,
-              model.removeTodo,
-            ),
+            child: TodoListView(),
           ),
         );
 
