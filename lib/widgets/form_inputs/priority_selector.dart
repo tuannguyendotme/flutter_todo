@@ -5,9 +5,9 @@ import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 
 class PrioritySelector extends StatefulWidget {
   final Function setPriority;
-  final Priority initialPriority;
+  final Priority priority;
 
-  PrioritySelector(this.initialPriority, this.setPriority);
+  PrioritySelector(this.priority, this.setPriority);
 
   @override
   State<StatefulWidget> createState() {
@@ -16,11 +16,11 @@ class PrioritySelector extends StatefulWidget {
 }
 
 class _PrioritySelectorState extends State<PrioritySelector> {
-  Priority priority;
+  Priority _priority;
 
   @override
   void initState() {
-    priority = widget.initialPriority;
+    _priority = widget.priority;
 
     super.initState();
   }
@@ -28,27 +28,26 @@ class _PrioritySelectorState extends State<PrioritySelector> {
   Widget _buildItems() {
     List<Container> items = new List<Container>();
 
-    Priority.values.forEach((priorityValue) {
-      Color priorityColor = PriorityHelper.getPriorityColor(priorityValue);
+    Priority.values.forEach((p) {
+      Color priorityColor = PriorityHelper.getPriorityColor(p);
 
       items.add(Container(
         height: 60.0,
         child: FlatButton(
           color: priorityColor,
-          child: priority == priorityValue ? Icon(Icons.check) : null,
+          child: _priority == p ? Icon(Icons.check) : null,
           onPressed: () {
             setState(() {
-              priority = priorityValue;
+              _priority = p;
             });
 
-            widget.setPriority(priority);
+            widget.setPriority(_priority);
           },
         ),
       ));
     });
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: items,
     );
   }

@@ -7,11 +7,13 @@ class Todo {
   final String title;
   final String content;
   final Priority priority;
+  final bool isDone;
 
   Todo({
     @required this.id,
     @required this.title,
     this.content,
     this.priority = Priority.Low,
+    this.isDone = false,
   });
 }

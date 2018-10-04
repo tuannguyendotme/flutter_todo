@@ -73,14 +73,15 @@ class AppModel extends Model {
   }
 
   Future<bool> createTodo(
-      String title, String content, Priority priority) async {
+      String title, String content, Priority priority, bool isDone) async {
     _isLoading = true;
     notifyListeners();
 
     final Map<String, dynamic> formData = {
       'title': title,
       'content': content,
-      'priority': priority.toString()
+      'priority': priority.toString(),
+      'isDone': isDone,
     };
 
     try {
@@ -103,6 +104,7 @@ class AppModel extends Model {
         title: title,
         content: content,
         priority: priority,
+        isDone: isDone,
       );
       _todos.add(todo);
 
@@ -119,14 +121,15 @@ class AppModel extends Model {
   }
 
   Future<bool> updateTodo(
-      String title, String content, Priority priority) async {
+      String title, String content, Priority priority, bool isDone) async {
     _isLoading = true;
     notifyListeners();
 
     final Map<String, dynamic> formData = {
       'title': title,
       'content': content,
-      'priority': priority.toString()
+      'priority': priority.toString(),
+      'isDone': isDone,
     };
 
     try {
@@ -147,6 +150,7 @@ class AppModel extends Model {
         title: title,
         content: content,
         priority: priority,
+        isDone: isDone,
       );
       int todoIndex = _todos.indexWhere((t) => t.id == currentTodo.id);
       _todos[todoIndex] = todo;

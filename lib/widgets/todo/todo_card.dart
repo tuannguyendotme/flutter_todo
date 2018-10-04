@@ -22,8 +22,9 @@ class TodoCard extends StatelessWidget {
                 bottomLeft: const Radius.circular(4.0),
               ),
             ),
-            width: 12.0,
+            width: 40.0,
             height: 80.0,
+            child: todo.isDone ? Icon(Icons.check) : null,
           ),
           Expanded(
             child: Container(
