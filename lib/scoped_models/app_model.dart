@@ -199,4 +199,52 @@ class AppModel extends Model {
       return false;
     }
   }
+
+  Future<bool> toggleDone(String id) async {
+    _isLoading = true;
+    notifyListeners();
+
+    Todo todo = _todos.firstWhere((t) => t.id == id);
+
+    final Map<String, dynamic> formData = {
+      'title': todo.title,
+      'content': todo.content,
+      'priority': todo.priority.toString(),
+      'isDone': !todo.isDone,
+    };
+
+    try {
+      final http.Response response = await http.put(
+        'https://flutter-todo-ca169.firebaseio.com/todos/${currentTodo.id}.json',
+        body: json.encode(formData),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+
+        return false;
+      }
+
+      todo = Todo(
+        id: todo.id,
+        title: todo.title,
+        content: todo.content,
+        priority: todo.priority,
+        isDone: !todo.isDone,
+      );
+      int todoIndex = _todos.indexWhere((t) => t.id == currentTodo.id);
+      _todos[todoIndex] = todo;
+
+      _isLoading = false;
+      notifyListeners();
+
+      return true;
+    } catch (error) {
+      _isLoading = false;
+      notifyListeners();
+
+      return false;
+    }
+  }
 }

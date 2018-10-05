@@ -24,7 +24,7 @@ class TodoListView extends StatelessWidget {
                 onDismissed: (DismissDirection direction) {
                   model.removeTodo(todo.id);
                 },
-                child: TodoCard(todo, model.setCurrentTodo),
+                child: TodoCard(todo),
                 background: Container(color: Colors.red),
               );
             },
