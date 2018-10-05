@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
@@ -34,8 +35,8 @@ class AppModel extends Model {
     notifyListeners();
 
     try {
-      final http.Response response = await http
-          .get('https://flutter-todo-ca169.firebaseio.com/todos.json');
+      final http.Response response =
+          await http.get('${Configure.FirebaseUrl}/todos.json');
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
@@ -86,7 +87,7 @@ class AppModel extends Model {
 
     try {
       final http.Response response = await http.post(
-        'https://flutter-todo-ca169.firebaseio.com/todos.json',
+        '${Configure.FirebaseUrl}/todos.json',
         body: json.encode(formData),
       );
 
@@ -134,7 +135,7 @@ class AppModel extends Model {
 
     try {
       final http.Response response = await http.put(
-        'https://flutter-todo-ca169.firebaseio.com/todos/${currentTodo.id}.json',
+        '${Configure.FirebaseUrl}/todos/${currentTodo.id}.json',
         body: json.encode(formData),
       );
 
@@ -176,8 +177,8 @@ class AppModel extends Model {
       int todoIndex = _todos.indexWhere((t) => t.id == id);
       _todos.removeAt(todoIndex);
 
-      final http.Response response = await http
-          .delete('https://flutter-todo-ca169.firebaseio.com/todos/$id.json');
+      final http.Response response =
+          await http.delete('${Configure.FirebaseUrl}/todos/$id.json');
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         _todos[todoIndex] = todo;
@@ -215,7 +216,7 @@ class AppModel extends Model {
 
     try {
       final http.Response response = await http.put(
-        'https://flutter-todo-ca169.firebaseio.com/todos/${currentTodo.id}.json',
+        '${Configure.FirebaseUrl}/todos/$id.json',
         body: json.encode(formData),
       );
 
@@ -233,7 +234,7 @@ class AppModel extends Model {
         priority: todo.priority,
         isDone: !todo.isDone,
       );
-      int todoIndex = _todos.indexWhere((t) => t.id == currentTodo.id);
+      int todoIndex = _todos.indexWhere((t) => t.id == id);
       _todos[todoIndex] = todo;
 
       _isLoading = false;

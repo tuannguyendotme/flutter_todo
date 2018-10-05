@@ -12,4 +12,6 @@ pubspec.lock
 # If you don't generate documentation locally you can remove this line.
 doc/api/
 
+.DS_Store
 .idea/
+.env.dart
