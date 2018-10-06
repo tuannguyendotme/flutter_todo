@@ -44,32 +44,85 @@ class _TodoListPageState extends State<TodoListPage> {
             },
           ),
           bottomNavigationBar: BottomAppBar(
-            child: new Row(
+            child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 SizedBox(),
-                IconButton(
-                  icon: Icon(Icons.all_inclusive),
-                  color:
-                      model.filter == Filter.All ? Colors.black : Colors.white,
+                FlatButton(
+                  child: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          Icons.all_inclusive,
+                          color: model.filter == Filter.All
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                        Text(
+                          'All',
+                          style: TextStyle(
+                            color: model.filter == Filter.All
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   onPressed: () {
                     model.applyFilter(Filter.All);
                   },
                 ),
-                IconButton(
-                  icon: Icon(Icons.check),
-                  color:
-                      model.filter == Filter.Done ? Colors.black : Colors.white,
+                FlatButton(
+                  child: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          Icons.check,
+                          color: model.filter == Filter.Done
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                        Text(
+                          'Done',
+                          style: TextStyle(
+                            color: model.filter == Filter.Done
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   onPressed: () {
                     model.applyFilter(Filter.Done);
                   },
                 ),
-                IconButton(
-                  icon: Icon(Icons.check_box_outline_blank),
-                  color: model.filter == Filter.NotDone
-                      ? Colors.black
-                      : Colors.white,
+                FlatButton(
+                  child: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          Icons.check_box_outline_blank,
+                          color: model.filter == Filter.NotDone
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                        Text(
+                          'Not Done',
+                          style: TextStyle(
+                            color: model.filter == Filter.NotDone
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   onPressed: () {
                     model.applyFilter(Filter.NotDone);
                   },
