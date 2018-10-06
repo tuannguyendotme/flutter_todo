@@ -28,7 +28,8 @@ class _ToggleButtonState extends State<ToggleButton> {
       height: 60.0,
       child: FlatButton(
         color: Colors.blue,
-        child: _selected ? Icon(Icons.check) : null,
+        child:
+            _selected ? Icon(Icons.check) : Icon(Icons.check_box_outline_blank),
         onPressed: () {
           setState(() {
             _selected = !_selected;

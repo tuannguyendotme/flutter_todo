@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/models/filter.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
@@ -33,6 +34,7 @@ class _TodoListPageState extends State<TodoListPage> {
           appBar: AppBar(
             title: Text('Todo'),
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {
@@ -40,6 +42,45 @@ class _TodoListPageState extends State<TodoListPage> {
 
               Navigator.pushNamed(context, '/editor');
             },
+          ),
+          bottomNavigationBar: BottomAppBar(
+            child: new Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SizedBox(),
+                IconButton(
+                  icon: Icon(Icons.all_inclusive),
+                  color:
+                      model.filter == Filter.All ? Colors.black : Colors.white,
+                  onPressed: () {
+                    model.applyFilter(Filter.All);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.check),
+                  color:
+                      model.filter == Filter.Done ? Colors.black : Colors.white,
+                  onPressed: () {
+                    model.applyFilter(Filter.Done);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.check_box_outline_blank),
+                  color: model.filter == Filter.NotDone
+                      ? Colors.black
+                      : Colors.white,
+                  onPressed: () {
+                    model.applyFilter(Filter.NotDone);
+                  },
+                ),
+                SizedBox(
+                  width: 80.0,
+                ),
+              ],
+            ),
+            color: Colors.blue,
+            shape: CircularNotchedRectangle(),
           ),
           body: Center(
             child: TodoListView(),

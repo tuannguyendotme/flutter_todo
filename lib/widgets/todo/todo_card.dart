@@ -35,8 +35,8 @@ class TodoCard extends StatelessWidget {
                           model.toggleDone(todo.id);
                         },
                       )
-                    : FlatButton(
-                        child: null,
+                    : IconButton(
+                        icon: Icon(Icons.check_box_outline_blank),
                         onPressed: () {
                           model.toggleDone(todo.id);
                         },

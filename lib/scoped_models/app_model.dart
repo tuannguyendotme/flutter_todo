@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/models/filter.dart';
 import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 import 'package:flutter_todo/models/priority.dart';
@@ -13,8 +14,20 @@ class AppModel extends Model {
   final List<Todo> _todos = [];
   Todo _todo;
   bool _isLoading = false;
+  Filter _filter = Filter.All;
 
   List<Todo> get todos {
+    switch (_filter) {
+      case Filter.All:
+        return List.from(_todos);
+
+      case Filter.Done:
+        return List.from(_todos.where((todo) => todo.isDone));
+
+      case Filter.NotDone:
+        return List.from(_todos.where((todo) => !todo.isDone));
+    }
+
     return List.from(_todos);
   }
 
@@ -24,6 +37,15 @@ class AppModel extends Model {
 
   Todo get currentTodo {
     return _todo;
+  }
+
+  Filter get filter {
+    return _filter;
+  }
+
+  void applyFilter(Filter filter) {
+    _filter = filter;
+    notifyListeners();
   }
 
   void setCurrentTodo(Todo todo) {
