@@ -86,6 +86,7 @@ class TodosModel extends CoreModel {
           title: todoData['title'],
           content: todoData['content'],
           priority: PriorityHelper.toPriority(todoData['priority']),
+          isDone: todoData['isDone'],
         );
 
         _todos.add(todo);
