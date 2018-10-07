@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/pages/auth/auth_page.dart';
 import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
 import 'package:flutter_todo/pages/todo/todo_list_page.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
@@ -21,12 +22,15 @@ class TodoApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         routes: {
-          '/': (BuildContext context) => TodoListPage(_model),
-          '/editor': (BuildContext context) => TodoEditorPage(),
+          '/': (BuildContext context) =>
+              _model.user != null ? TodoListPage(_model) : AuthPage(),
+          '/editor': (BuildContext context) =>
+              _model.user != null ? TodoEditorPage() : AuthPage(),
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-            builder: (BuildContext context) => TodoListPage(_model),
+            builder: (BuildContext context) =>
+                _model.user != null ? TodoListPage(_model) : AuthPage(),
           );
         },
       ),
