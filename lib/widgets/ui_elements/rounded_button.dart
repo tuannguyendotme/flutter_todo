@@ -6,7 +6,7 @@ class RoundedButton extends StatelessWidget {
   final Function onPressed;
 
   RoundedButton({
-    @required this.icon,
+    this.icon,
     @required this.label,
     @required this.onPressed,
   });
@@ -15,15 +15,24 @@ class RoundedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 120.0,
-      child: FlatButton.icon(
-        color: Colors.blue,
-        icon: icon,
-        label: Text(label),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-        ),
-        onPressed: onPressed,
-      ),
+      child: this.icon != null
+          ? FlatButton.icon(
+              color: Colors.blue,
+              icon: icon,
+              label: Text(label),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+              onPressed: onPressed,
+            )
+          : FlatButton(
+              color: Colors.blue,
+              child: Text(label),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+              onPressed: onPressed,
+            ),
     );
   }
 }

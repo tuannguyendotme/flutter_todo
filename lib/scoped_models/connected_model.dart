@@ -12,7 +12,7 @@ import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
 
 class CoreModel extends Model {
-  final List<Todo> _todos = [];
+  List<Todo> _todos = [];
   Todo _todo;
   bool _isLoading = false;
   Filter _filter = Filter.All;
@@ -323,5 +323,12 @@ class UserModel extends CoreModel {
 
       return false;
     }
+  }
+
+  void logout() {
+    _todos = [];
+    _todo = null;
+    _filter = Filter.All;
+    _user = null;
   }
 }
