@@ -4,12 +4,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/models/user.dart';
 import 'package:flutter_todo/models/filter.dart';
-import 'package:flutter_todo/.env.dart';
-import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
+import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 
 class CoreModel extends Model {
   List<Todo> _todos = [];
@@ -61,8 +61,8 @@ class TodosModel extends CoreModel {
     notifyListeners();
 
     try {
-      final http.Response response =
-          await http.get('${Configure.FirebaseUrl}/todos.json');
+      final http.Response response = await http
+          .get('${Configure.FirebaseUrl}/todos.json?auth=${_user.token}');
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
@@ -114,7 +114,7 @@ class TodosModel extends CoreModel {
 
     try {
       final http.Response response = await http.post(
-        '${Configure.FirebaseUrl}/todos.json',
+        '${Configure.FirebaseUrl}/todos.json?auth=${_user.token}',
         body: json.encode(formData),
       );
 
@@ -162,7 +162,7 @@ class TodosModel extends CoreModel {
 
     try {
       final http.Response response = await http.put(
-        '${Configure.FirebaseUrl}/todos/${currentTodo.id}.json',
+        '${Configure.FirebaseUrl}/todos/${currentTodo.id}.json?auth=${_user.token}',
         body: json.encode(formData),
       );
 
@@ -204,8 +204,8 @@ class TodosModel extends CoreModel {
       int todoIndex = _todos.indexWhere((t) => t.id == id);
       _todos.removeAt(todoIndex);
 
-      final http.Response response =
-          await http.delete('${Configure.FirebaseUrl}/todos/$id.json');
+      final http.Response response = await http.delete(
+          '${Configure.FirebaseUrl}/todos/$id.json?auth=${_user.token}');
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         _todos[todoIndex] = todo;
@@ -243,7 +243,7 @@ class TodosModel extends CoreModel {
 
     try {
       final http.Response response = await http.put(
-        '${Configure.FirebaseUrl}/todos/$id.json',
+        '${Configure.FirebaseUrl}/todos/$id.json?auth=${_user.token}',
         body: json.encode(formData),
       );
 
