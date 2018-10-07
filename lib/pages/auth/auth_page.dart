@@ -63,8 +63,10 @@ class _AuthPageState extends State<AuthPage> {
                       TextFormField(
                         decoration: InputDecoration(labelText: 'Email'),
                         validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter email';
+                          if (value.isEmpty ||
+                              !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                                  .hasMatch(value)) {
+                            return 'Please enter a valid email';
                           }
                         },
                         onSaved: (value) {
