@@ -287,6 +287,7 @@ class TodosModel extends CoreModel {
 }
 
 class UserModel extends CoreModel {
+  Timer _authTimer;
   PublishSubject<bool> _userSubject = PublishSubject();
 
   User get user {
@@ -329,12 +330,19 @@ class UserModel extends CoreModel {
         token: responseData['idToken'],
       );
 
-      _userSubject.add(true);
+      setAuthTimeout(int.parse(responseData['expiresIn']));
+
+      final DateTime now = DateTime.now();
+      final DateTime expiryTime =
+          now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
 
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('userId', responseData['localId']);
       prefs.setString('email', responseData['email']);
       prefs.setString('token', responseData['idToken']);
+      prefs.setString('expiryTime', expiryTime.toIso8601String());
+
+      _userSubject.add(true);
 
       _isLoading = false;
       notifyListeners();
@@ -354,6 +362,8 @@ class UserModel extends CoreModel {
     _filter = Filter.All;
     _user = null;
 
+    _authTimer.cancel();
+
     _userSubject.add(false);
 
     final prefs = await SharedPreferences.getInstance();
@@ -365,14 +375,32 @@ class UserModel extends CoreModel {
     final String token = prefs.getString('token');
 
     if (token != null) {
+      final String expiryTimeString = prefs.getString('expiryTime');
+      final DateTime now = DateTime.now();
+      final parsedExpiryTime = DateTime.parse(expiryTimeString);
+
+      if (parsedExpiryTime.isBefore(now)) {
+        _user = null;
+        notifyListeners();
+        return;
+      }
+
       _user = User(
         id: prefs.getString('userId'),
         email: prefs.getString('email'),
         token: token,
       );
 
+      final int tokenLifespan = parsedExpiryTime.difference(now).inSeconds;
+      setAuthTimeout(tokenLifespan);
+
       _userSubject.add(true);
+
       notifyListeners();
     }
+  }
+
+  void setAuthTimeout(int time) {
+    _authTimer = Timer(Duration(seconds: time), logout);
   }
 }
