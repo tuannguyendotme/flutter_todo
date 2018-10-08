@@ -8,6 +8,7 @@ class Todo {
   final String content;
   final Priority priority;
   final bool isDone;
+  final String userId;
 
   Todo({
     @required this.id,
@@ -15,5 +16,6 @@ class Todo {
     this.content,
     this.priority = Priority.Low,
     this.isDone = false,
+    @required this.userId,
   });
 }

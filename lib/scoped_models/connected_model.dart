@@ -61,8 +61,8 @@ class TodosModel extends CoreModel {
     notifyListeners();
 
     try {
-      final http.Response response = await http
-          .get('${Configure.FirebaseUrl}/todos.json?auth=${_user.token}');
+      final http.Response response = await http.get(
+          '${Configure.FirebaseUrl}/todos.json?auth=${_user.token}&orderBy="userId"&equalTo="${_user.id}"');
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
@@ -87,6 +87,7 @@ class TodosModel extends CoreModel {
           content: todoData['content'],
           priority: PriorityHelper.toPriority(todoData['priority']),
           isDone: todoData['isDone'],
+          userId: _user.id,
         );
 
         _todos.add(todo);
@@ -110,6 +111,7 @@ class TodosModel extends CoreModel {
       'content': content,
       'priority': priority.toString(),
       'isDone': isDone,
+      'userId': _user.id,
     };
 
     try {
@@ -133,6 +135,7 @@ class TodosModel extends CoreModel {
         content: content,
         priority: priority,
         isDone: isDone,
+        userId: _user.id,
       );
       _todos.add(todo);
 
@@ -158,6 +161,7 @@ class TodosModel extends CoreModel {
       'content': content,
       'priority': priority.toString(),
       'isDone': isDone,
+      'userId': _user.id,
     };
 
     try {
@@ -179,6 +183,7 @@ class TodosModel extends CoreModel {
         content: content,
         priority: priority,
         isDone: isDone,
+        userId: _user.id,
       );
       int todoIndex = _todos.indexWhere((t) => t.id == currentTodo.id);
       _todos[todoIndex] = todo;
@@ -239,6 +244,7 @@ class TodosModel extends CoreModel {
       'content': todo.content,
       'priority': todo.priority.toString(),
       'isDone': !todo.isDone,
+      'userId': _user.id,
     };
 
     try {
@@ -260,6 +266,7 @@ class TodosModel extends CoreModel {
         content: todo.content,
         priority: todo.priority,
         isDone: !todo.isDone,
+        userId: _user.id,
       );
       int todoIndex = _todos.indexWhere((t) => t.id == id);
       _todos[todoIndex] = todo;
