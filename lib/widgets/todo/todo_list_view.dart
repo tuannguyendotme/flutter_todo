@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/models/filter.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
@@ -30,8 +31,24 @@ class TodoListView extends StatelessWidget {
             },
           );
         } else {
+          String emptyText;
+
+          switch (model.filter) {
+            case Filter.All:
+              emptyText = 'There are no todo yet. Please create one.';
+              break;
+
+            case Filter.Done:
+              emptyText = 'There are no Done todo yet. Please create one.';
+              break;
+
+            case Filter.NotDone:
+              emptyText = 'There are no Not Done todo yet. Please create one.';
+              break;
+          }
+
           todoCards = Center(
-            child: Text('There are no todo yet. Please create one.'),
+            child: Text(emptyText),
           );
         }
 

@@ -73,6 +73,7 @@ class _AuthPageState extends State<AuthPage> {
                         },
                       ),
                       TextFormField(
+                        obscureText: true,
                         decoration: InputDecoration(labelText: 'Password'),
                         validator: (value) {
                           if (value.isEmpty) {
