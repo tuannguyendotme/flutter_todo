@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rxdart/subjects.dart';
 
 import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/models/user.dart';
@@ -285,8 +287,14 @@ class TodosModel extends CoreModel {
 }
 
 class UserModel extends CoreModel {
+  PublishSubject<bool> _userSubject = PublishSubject();
+
   User get user {
     return _user;
+  }
+
+  PublishSubject<bool> get userSubject {
+    return _userSubject;
   }
 
   Future<bool> authenticate(String email, String password) async {
@@ -321,6 +329,13 @@ class UserModel extends CoreModel {
         token: responseData['idToken'],
       );
 
+      _userSubject.add(true);
+
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId', responseData['localId']);
+      prefs.setString('email', responseData['email']);
+      prefs.setString('token', responseData['idToken']);
+
       _isLoading = false;
       notifyListeners();
 
@@ -333,10 +348,31 @@ class UserModel extends CoreModel {
     }
   }
 
-  void logout() {
+  void logout() async {
     _todos = [];
     _todo = null;
     _filter = Filter.All;
     _user = null;
+
+    _userSubject.add(false);
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
+  void autoAuthentication() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token');
+
+    if (token != null) {
+      _user = User(
+        id: prefs.getString('userId'),
+        email: prefs.getString('email'),
+        token: token,
+      );
+
+      _userSubject.add(true);
+      notifyListeners();
+    }
   }
 }

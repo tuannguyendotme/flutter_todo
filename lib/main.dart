@@ -9,8 +9,28 @@ import 'package:flutter_todo/scoped_models/app_model.dart';
 
 void main() => runApp(TodoApp());
 
-class TodoApp extends StatelessWidget {
-  final _model = AppModel();
+class TodoApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _TodoAppState();
+  }
+}
+
+class _TodoAppState extends State<TodoApp> {
+  final AppModel _model = AppModel();
+  bool _isAuthenticated = false;
+
+  @override
+  void initState() {
+    _model.autoAuthentication();
+    _model.userSubject.listen((bool isAuthenticated) {
+      setState(() {
+        _isAuthenticated = isAuthenticated;
+      });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +43,14 @@ class TodoApp extends StatelessWidget {
         ),
         routes: {
           '/': (BuildContext context) =>
-              _model.user != null ? TodoListPage(_model) : AuthPage(),
+              _isAuthenticated ? TodoListPage(_model) : AuthPage(),
           '/editor': (BuildContext context) =>
-              _model.user != null ? TodoEditorPage() : AuthPage(),
+              _isAuthenticated ? TodoEditorPage() : AuthPage(),
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
             builder: (BuildContext context) =>
-                _model.user != null ? TodoListPage(_model) : AuthPage(),
+                _isAuthenticated ? TodoListPage(_model) : AuthPage(),
           );
         },
       ),

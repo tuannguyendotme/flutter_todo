@@ -22,22 +22,21 @@ class _AuthPageState extends State<AuthPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  void _authenticate(AppModel model) {
+  void _authenticate(AppModel model) async {
     if (!_formKey.currentState.validate()) {
       return;
     }
 
     _formKey.currentState.save();
 
-    model
-        .authenticate(_formData['email'], _formData['password'])
-        .then((success) {
-      if (success) {
-        Navigator.pushReplacementNamed(context, '/');
-      } else {
-        ErrorDialog.show(context);
-      }
-    });
+    bool success =
+        await model.authenticate(_formData['email'], _formData['password']);
+
+    if (success) {
+      Navigator.pushReplacementNamed(context, '/');
+    } else {
+      ErrorDialog.show(context);
+    }
   }
 
   @override
