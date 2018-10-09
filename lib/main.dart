@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/pages/register/register_page.dart';
 import 'package:flutter_todo/pages/auth/auth_page.dart';
 import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
 import 'package:flutter_todo/pages/todo/todo_list_page.dart';
@@ -46,6 +47,8 @@ class _TodoAppState extends State<TodoApp> {
               _isAuthenticated ? TodoListPage(_model) : AuthPage(),
           '/editor': (BuildContext context) =>
               _isAuthenticated ? TodoEditorPage() : AuthPage(),
+          '/register': (BuildContext context) =>
+              _isAuthenticated ? TodoListPage(_model) : RegisterPage(),
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(

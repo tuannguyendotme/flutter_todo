@@ -367,6 +367,76 @@ class UserModel extends CoreModel {
     }
   }
 
+  Future<Map<String, dynamic>> register(String email, String password) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final Map<String, dynamic> formData = {
+      'email': email,
+      'password': password,
+      'returnSecureToken': true,
+    };
+
+    try {
+      final http.Response response = await http.post(
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${Configure.ApiKey}',
+        body: json.encode(formData),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      String message;
+
+      if (responseData.containsKey('idToken')) {
+        _user = User(
+          id: responseData['localId'],
+          email: responseData['email'],
+          token: responseData['idToken'],
+        );
+
+        setAuthTimeout(int.parse(responseData['expiresIn']));
+
+        final DateTime now = DateTime.now();
+        final DateTime expiryTime =
+            now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
+
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('userId', responseData['localId']);
+        prefs.setString('email', responseData['email']);
+        prefs.setString('token', responseData['idToken']);
+        prefs.setString('expiryTime', expiryTime.toIso8601String());
+
+        _userSubject.add(true);
+
+        _isLoading = false;
+        notifyListeners();
+
+        return {'success': true};
+      } else if (responseData['error']['message'] == 'EMAIL_EXISTS') {
+        message = 'Email is already exists.';
+      } else if (responseData['error']['message'] == 'OPERATION_NOT_ALLOWED') {
+        message = 'Password sign-in is disabled.';
+      } else if (responseData['error']['message'] ==
+          'TOO_MANY_ATTEMPTS_TRY_LATER') {
+        message =
+            'We have blocked all requests from this device due to unusual activity. Try again later.';
+      }
+
+      _isLoading = false;
+      notifyListeners();
+
+      return {
+        'success': false,
+        'message': message,
+      };
+    } catch (error) {
+      _isLoading = false;
+      notifyListeners();
+
+      return {'success': false, 'message': error};
+    }
+  }
+
   void logout() async {
     _todos = [];
     _todo = null;

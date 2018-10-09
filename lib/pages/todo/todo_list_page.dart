@@ -75,7 +75,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     Navigator.pushReplacementNamed(context, '/');
                   }
                 },
-              )
+              ),
             ],
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

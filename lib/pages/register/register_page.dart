@@ -7,22 +7,23 @@ import 'package:flutter_todo/widgets/helpers/error_dialog.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/widgets/ui_elements/rounded_button.dart';
 
-class AuthPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _AuthPageState();
+    return _RegisterPageState();
   }
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final Map<String, dynamic> _formData = {
     'email': null,
     'password': null,
   };
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
 
-  void _authenticate(AppModel model) async {
+  void _register(AppModel model) async {
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -30,9 +31,10 @@ class _AuthPageState extends State<AuthPage> {
     _formKey.currentState.save();
 
     Map<String, dynamic> authResult =
-        await model.authenticate(_formData['email'], _formData['password']);
+        await model.register(_formData['email'], _formData['password']);
 
     if (authResult['success']) {
+      Navigator.pop(context);
     } else {
       ErrorDialog.show(context, authResult['message']);
     }
@@ -74,13 +76,24 @@ class _AuthPageState extends State<AuthPage> {
                       TextFormField(
                         obscureText: true,
                         decoration: InputDecoration(labelText: 'Password'),
+                        controller: _passwordController,
                         validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter password';
+                          if (value.isEmpty || value.length < 6) {
+                            return 'Please enter valid password';
                           }
                         },
                         onSaved: (value) {
                           _formData['password'] = value;
+                        },
+                      ),
+                      TextFormField(
+                        obscureText: true,
+                        decoration:
+                            InputDecoration(labelText: 'Confirm Password'),
+                        validator: (value) {
+                          if (value != _passwordController.value.text) {
+                            return 'Password and confirm password are not match';
+                          }
                         },
                       ),
                       SizedBox(
@@ -93,19 +106,11 @@ class _AuthPageState extends State<AuthPage> {
                             icon: Icon(Icons.edit),
                             label: 'Register',
                             onPressed: () {
-                              Navigator.pushNamed(context, '/register');
+                              _register(model);
                             },
                           ),
-                          SizedBox(
-                            width: 20.0,
-                          ),
-                          RoundedButton(
-                            icon: Icon(Icons.lock_open),
-                            label: 'Login',
-                            onPressed: () => _authenticate(model),
-                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
