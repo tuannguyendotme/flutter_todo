@@ -29,13 +29,13 @@ class _AuthPageState extends State<AuthPage> {
 
     _formKey.currentState.save();
 
-    bool success =
+    Map<String, dynamic> authResult =
         await model.authenticate(_formData['email'], _formData['password']);
 
-    if (success) {
+    if (authResult['success']) {
       Navigator.pushReplacementNamed(context, '/');
     } else {
-      ErrorDialog.show(context);
+      ErrorDialog.show(context, authResult['message']);
     }
   }
 

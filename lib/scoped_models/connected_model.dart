@@ -298,7 +298,8 @@ class UserModel extends CoreModel {
     return _userSubject;
   }
 
-  Future<bool> authenticate(String email, String password) async {
+  Future<Map<String, dynamic>> authenticate(
+      String email, String password) async {
     _isLoading = true;
     notifyListeners();
 
@@ -315,44 +316,54 @@ class UserModel extends CoreModel {
         headers: {'Content-Type': 'application/json'},
       );
 
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      String message;
+
+      if (responseData.containsKey('idToken')) {
+        _user = User(
+          id: responseData['localId'],
+          email: responseData['email'],
+          token: responseData['idToken'],
+        );
+
+        setAuthTimeout(int.parse(responseData['expiresIn']));
+
+        final DateTime now = DateTime.now();
+        final DateTime expiryTime =
+            now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
+
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('userId', responseData['localId']);
+        prefs.setString('email', responseData['email']);
+        prefs.setString('token', responseData['idToken']);
+        prefs.setString('expiryTime', expiryTime.toIso8601String());
+
+        _userSubject.add(true);
+
         _isLoading = false;
         notifyListeners();
 
-        return false;
+        return {'success': true};
+      } else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
+        message = 'Email is not found.';
+      } else if (responseData['error']['message'] == 'INVALID_PASSWORD') {
+        message = 'Password is invalid.';
+      } else if (responseData['error']['message'] == 'USER_DISABLED') {
+        message = 'The user account has been disabled.';
       }
-
-      final Map<String, dynamic> responseData = json.decode(response.body);
-
-      _user = User(
-        id: responseData['localId'],
-        email: responseData['email'],
-        token: responseData['idToken'],
-      );
-
-      setAuthTimeout(int.parse(responseData['expiresIn']));
-
-      final DateTime now = DateTime.now();
-      final DateTime expiryTime =
-          now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
-
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('userId', responseData['localId']);
-      prefs.setString('email', responseData['email']);
-      prefs.setString('token', responseData['idToken']);
-      prefs.setString('expiryTime', expiryTime.toIso8601String());
-
-      _userSubject.add(true);
 
       _isLoading = false;
       notifyListeners();
 
-      return true;
+      return {
+        'success': false,
+        'message': message,
+      };
     } catch (error) {
       _isLoading = false;
       notifyListeners();
 
-      return false;
+      return {'success': false, 'message': error};
     }
   }
 
