@@ -71,8 +71,6 @@ class _TodoListPageState extends State<TodoListPage> {
 
                   if (confirm) {
                     model.logout();
-
-                    Navigator.pushReplacementNamed(context, '/');
                   }
                 },
               ),
