@@ -6,6 +6,8 @@ Yet another Todo app, now using Flutter.
 
 This Todo app is implemented using Flutter and Firebase.
 
+![Todo](screenshot.png?raw=true)
+
 To get start, run below command in Terminal
 
 ```
