@@ -196,23 +196,27 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     );
   }
 
+  Widget _buildPageContent(AppModel model) {
+    return Scaffold(
+      appBar: _buildAppBar(model),
+      floatingActionButton: _buildFloatingActionButton(model),
+      body: Container(
+        padding: EdgeInsets.all(10.0),
+        child: Center(
+          child: _buildForm(model),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppModel>(
       builder: (BuildContext context, Widget child, AppModel model) {
-        Widget pageContent = Scaffold(
-          appBar: _buildAppBar(model),
-          floatingActionButton: _buildFloatingActionButton(model),
-          body: Container(
-            padding: EdgeInsets.all(10.0),
-            child: Center(
-              child: _buildForm(model),
-            ),
-          ),
-        );
-
         Stack mainStack = Stack(
-          children: <Widget>[pageContent],
+          children: <Widget>[
+            _buildPageContent(model),
+          ],
         );
 
         if (model.isLoading) {

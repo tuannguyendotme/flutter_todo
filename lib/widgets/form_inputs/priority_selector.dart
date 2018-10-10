@@ -25,7 +25,7 @@ class _PrioritySelectorState extends State<PrioritySelector> {
     super.initState();
   }
 
-  Widget _buildItems() {
+  List<Container> _buildItems() {
     List<Container> items = new List<Container>();
 
     Priority.values.forEach((p) {
@@ -47,13 +47,13 @@ class _PrioritySelectorState extends State<PrioritySelector> {
       ));
     });
 
-    return Row(
-      children: items,
-    );
+    return items;
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildItems();
+    return Row(
+      children: _buildItems(),
+    );
   }
 }

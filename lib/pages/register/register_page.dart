@@ -139,10 +139,10 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppModel>(
       builder: (BuildContext context, Widget child, AppModel model) {
-        Widget pageContent = _buildPageContent(model);
-
         Stack mainStack = Stack(
-          children: <Widget>[pageContent],
+          children: <Widget>[
+            _buildPageContent(model),
+          ],
         );
 
         if (model.isLoading) {
