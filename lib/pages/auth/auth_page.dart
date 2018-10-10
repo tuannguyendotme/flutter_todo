@@ -38,6 +38,60 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
+  Widget _buildEmailField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Email'),
+      validator: (value) {
+        if (value.isEmpty ||
+            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
+          return 'Please enter a valid email';
+        }
+      },
+      onSaved: (value) {
+        _formData['email'] = value;
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return TextFormField(
+      obscureText: true,
+      decoration: InputDecoration(labelText: 'Password'),
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter password';
+        }
+      },
+      onSaved: (value) {
+        _formData['password'] = value;
+      },
+    );
+  }
+
+  Widget _buildButtonRow(model) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        RoundedButton(
+          icon: Icon(Icons.edit),
+          label: 'Register',
+          onPressed: () {
+            Navigator.pushNamed(context, '/register');
+          },
+        ),
+        SizedBox(
+          width: 20.0,
+        ),
+        RoundedButton(
+          icon: Icon(Icons.lock_open),
+          label: 'Login',
+          onPressed: () => _authenticate(model),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -52,61 +106,21 @@ class _AuthPageState extends State<AuthPage> {
           body: Container(
             padding: EdgeInsets.all(10.0),
             child: Center(
-              child: Container(
-                width: targetWidth,
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: <Widget>[
-                      TextFormField(
-                        decoration: InputDecoration(labelText: 'Email'),
-                        validator: (value) {
-                          if (value.isEmpty ||
-                              !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                                  .hasMatch(value)) {
-                            return 'Please enter a valid email';
-                          }
-                        },
-                        onSaved: (value) {
-                          _formData['email'] = value;
-                        },
-                      ),
-                      TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(labelText: 'Password'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter password';
-                          }
-                        },
-                        onSaved: (value) {
-                          _formData['password'] = value;
-                        },
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          RoundedButton(
-                            icon: Icon(Icons.edit),
-                            label: 'Register',
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/register');
-                            },
-                          ),
-                          SizedBox(
-                            width: 20.0,
-                          ),
-                          RoundedButton(
-                            icon: Icon(Icons.lock_open),
-                            label: 'Login',
-                            onPressed: () => _authenticate(model),
-                          ),
-                        ],
-                      )
-                    ],
+              child: SingleChildScrollView(
+                child: Container(
+                  width: targetWidth,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        _buildEmailField(),
+                        _buildPasswordField(),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        _buildButtonRow(model),
+                      ],
+                    ),
                   ),
                 ),
               ),

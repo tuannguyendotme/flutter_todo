@@ -40,6 +40,65 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  Widget _buildEmailField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Email'),
+      validator: (value) {
+        if (value.isEmpty ||
+            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
+          return 'Please enter a valid email';
+        }
+      },
+      onSaved: (value) {
+        _formData['email'] = value;
+      },
+    );
+  }
+
+  Widget _buildConfirmPasswordField() {
+    return TextFormField(
+      obscureText: true,
+      decoration: InputDecoration(labelText: 'Confirm Password'),
+      validator: (value) {
+        if (value != _passwordController.value.text) {
+          return 'Password and confirm password are not match';
+        }
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return TextFormField(
+      obscureText: true,
+      decoration: InputDecoration(labelText: 'Password'),
+      controller: _passwordController,
+      validator: (value) {
+        if (value.isEmpty || value.length < 6) {
+          return 'Please enter valid password';
+        }
+      },
+      onSaved: (value) {
+        _formData['password'] = value;
+      },
+    );
+  }
+
+  Widget _buildButtonRow(model) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        RoundedButton(
+          icon: Icon(Icons.edit),
+          label: 'Register',
+          onPressed: () {
+            _register(model);
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -54,64 +113,22 @@ class _RegisterPageState extends State<RegisterPage> {
           body: Container(
             padding: EdgeInsets.all(10.0),
             child: Center(
-              child: Container(
-                width: targetWidth,
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: <Widget>[
-                      TextFormField(
-                        decoration: InputDecoration(labelText: 'Email'),
-                        validator: (value) {
-                          if (value.isEmpty ||
-                              !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                                  .hasMatch(value)) {
-                            return 'Please enter a valid email';
-                          }
-                        },
-                        onSaved: (value) {
-                          _formData['email'] = value;
-                        },
-                      ),
-                      TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(labelText: 'Password'),
-                        controller: _passwordController,
-                        validator: (value) {
-                          if (value.isEmpty || value.length < 6) {
-                            return 'Please enter valid password';
-                          }
-                        },
-                        onSaved: (value) {
-                          _formData['password'] = value;
-                        },
-                      ),
-                      TextFormField(
-                        obscureText: true,
-                        decoration:
-                            InputDecoration(labelText: 'Confirm Password'),
-                        validator: (value) {
-                          if (value != _passwordController.value.text) {
-                            return 'Password and confirm password are not match';
-                          }
-                        },
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          RoundedButton(
-                            icon: Icon(Icons.edit),
-                            label: 'Register',
-                            onPressed: () {
-                              _register(model);
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+              child: SingleChildScrollView(
+                child: Container(
+                  width: targetWidth,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        _buildEmailField(),
+                        _buildPasswordField(),
+                        _buildConfirmPasswordField(),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        _buildButtonRow(model),
+                      ],
+                    ),
                   ),
                 ),
               ),
