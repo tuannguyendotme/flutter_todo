@@ -36,157 +36,177 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     _formData['isDone'] = isDone;
   }
 
+  Widget _buildAppBar(AppModel model) {
+    return AppBar(
+      title: Text('Todo'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.lock),
+          onPressed: () async {
+            bool confirm = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return SimpleDialog(
+                    title: Text('Are you sure to logout?'),
+                    contentPadding: EdgeInsets.all(12.0),
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          RoundedButton(
+                            label: 'No',
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                          ),
+                          SizedBox(
+                            width: 20.0,
+                          ),
+                          RoundedButton(
+                            label: 'Yes',
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                });
+
+            if (confirm) {
+              Navigator.pop(context);
+
+              model.logout();
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFloatingActionButton(AppModel model) {
+    return FloatingActionButton(
+      child: Icon(Icons.save),
+      onPressed: () {
+        if (!_formKey.currentState.validate()) {
+          return;
+        }
+
+        _formKey.currentState.save();
+
+        if (model.currentTodo != null) {
+          model
+              .updateTodo(
+            _formData['title'],
+            _formData['content'],
+            _formData['priority'],
+            _formData['isDone'],
+          )
+              .then((bool success) {
+            if (success) {
+              model.setCurrentTodo(null);
+
+              Navigator.pop(context);
+            } else {
+              ErrorDialog.show(context);
+            }
+          });
+        } else {
+          model
+              .createTodo(
+            _formData['title'],
+            _formData['content'],
+            _formData['priority'],
+            _formData['isDone'],
+          )
+              .then((bool success) {
+            if (success) {
+              Navigator.pop(context);
+            } else {
+              ErrorDialog.show(context);
+            }
+          });
+        }
+      },
+    );
+  }
+
+  Widget _buildTitleField(Todo todo) {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Title'),
+      initialValue: todo != null ? todo.title : '',
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter todo\'s title';
+        }
+      },
+      onSaved: (value) {
+        _formData['title'] = value;
+      },
+    );
+  }
+
+  Widget _buildContentField(Todo todo) {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Content'),
+      initialValue: todo != null ? todo.content : '',
+      maxLines: 5,
+      onSaved: (value) {
+        _formData['content'] = value;
+      },
+    );
+  }
+
+  Widget _buildOthers(Todo todo) {
+    bool isDone = todo != null && todo.isDone;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        ToggleButton(isDone, _toggleDone),
+        PrioritySelector(
+          todo != null ? todo.priority : Priority.Low,
+          _selectPriority,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildForm(AppModel model) {
+    Todo todo = model.currentTodo;
+
+    _formData['title'] = todo != null ? todo.title : null;
+    _formData['content'] = todo != null ? todo.content : null;
+    _formData['priority'] = todo != null ? todo.priority : Priority.Low;
+    _formData['isDone'] = todo != null ? todo.isDone : false;
+
+    return Form(
+      key: _formKey,
+      child: ListView(
+        children: <Widget>[
+          _buildTitleField(todo),
+          _buildContentField(todo),
+          SizedBox(
+            height: 12.0,
+          ),
+          _buildOthers(todo),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppModel>(
       builder: (BuildContext context, Widget child, AppModel model) {
-        Todo currentTodo = model.currentTodo;
-        bool isDone = currentTodo != null && currentTodo.isDone;
-
-        _formData['title'] = currentTodo != null ? currentTodo.title : null;
-        _formData['content'] = currentTodo != null ? currentTodo.content : null;
-        _formData['priority'] =
-            currentTodo != null ? currentTodo.priority : Priority.Low;
-        _formData['isDone'] = currentTodo != null ? currentTodo.isDone : false;
-
         Widget pageContent = Scaffold(
-          appBar: AppBar(
-            title: Text('Todo'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.lock),
-                onPressed: () async {
-                  bool confirm = await showDialog<bool>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: Text('Are you sure to logout?'),
-                          contentPadding: EdgeInsets.all(12.0),
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                RoundedButton(
-                                  label: 'No',
-                                  onPressed: () {
-                                    Navigator.pop(context, false);
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 20.0,
-                                ),
-                                RoundedButton(
-                                  label: 'Yes',
-                                  onPressed: () {
-                                    Navigator.pop(context, true);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      });
-
-                  if (confirm) {
-                    Navigator.pop(context);
-
-                    model.logout();
-                  }
-                },
-              ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.save),
-            onPressed: () {
-              if (!_formKey.currentState.validate()) {
-                return;
-              }
-
-              _formKey.currentState.save();
-
-              if (currentTodo != null) {
-                model
-                    .updateTodo(
-                  _formData['title'],
-                  _formData['content'],
-                  _formData['priority'],
-                  _formData['isDone'],
-                )
-                    .then((bool success) {
-                  if (success) {
-                    model.setCurrentTodo(null);
-
-                    Navigator.pop(context);
-                  } else {
-                    ErrorDialog.show(context);
-                  }
-                });
-              } else {
-                model
-                    .createTodo(
-                  _formData['title'],
-                  _formData['content'],
-                  _formData['priority'],
-                  _formData['isDone'],
-                )
-                    .then((bool success) {
-                  if (success) {
-                    Navigator.pop(context);
-                  } else {
-                    ErrorDialog.show(context);
-                  }
-                });
-              }
-            },
-          ),
+          appBar: _buildAppBar(model),
+          floatingActionButton: _buildFloatingActionButton(model),
           body: Container(
             padding: EdgeInsets.all(10.0),
             child: Center(
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Title'),
-                      initialValue:
-                          currentTodo != null ? currentTodo.title : '',
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter todo\'s title';
-                        }
-                      },
-                      onSaved: (value) {
-                        _formData['title'] = value;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Content'),
-                      initialValue:
-                          currentTodo != null ? currentTodo.content : '',
-                      maxLines: 5,
-                      onSaved: (value) {
-                        _formData['content'] = value;
-                      },
-                    ),
-                    SizedBox(
-                      height: 12.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        ToggleButton(isDone, _toggleDone),
-                        PrioritySelector(
-                          currentTodo != null
-                              ? currentTodo.priority
-                              : Priority.Low,
-                          _selectPriority,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              child: _buildForm(model),
             ),
           ),
         );

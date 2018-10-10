@@ -84,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildButtonRow(model) {
+  Widget _buildButtonRow(AppModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -99,42 +99,47 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildPageContent(AppModel model) {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550 ? 500 : deviceWidth * 0.85;
 
-    return ScopedModelDescendant<AppModel>(
-      builder: (BuildContext context, Widget child, AppModel model) {
-        Widget pageContent = Scaffold(
-          appBar: AppBar(
-            title: Text('Todo'),
-          ),
-          body: Container(
-            padding: EdgeInsets.all(10.0),
-            child: Center(
-              child: SingleChildScrollView(
-                child: Container(
-                  width: targetWidth,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        _buildEmailField(),
-                        _buildPasswordField(),
-                        _buildConfirmPasswordField(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _buildButtonRow(model),
-                      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Todo'),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(10.0),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              width: targetWidth,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    _buildEmailField(),
+                    _buildPasswordField(),
+                    _buildConfirmPasswordField(),
+                    SizedBox(
+                      height: 20.0,
                     ),
-                  ),
+                    _buildButtonRow(model),
+                  ],
                 ),
               ),
             ),
           ),
-        );
+        ),
+      ),
+    );
+    ;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<AppModel>(
+      builder: (BuildContext context, Widget child, AppModel model) {
+        Widget pageContent = _buildPageContent(model);
 
         Stack mainStack = Stack(
           children: <Widget>[pageContent],
