@@ -4,7 +4,7 @@ Yet another Todo app, now using Flutter.
 
 ## Getting Started
 
-This Todo app is implemented using Flutter and Firebase.
+This Todo app is implemented using Flutter (with Scoped Model for state management) and Firebase.
 
 ![Todo](screenshot.png?raw=true)
 
