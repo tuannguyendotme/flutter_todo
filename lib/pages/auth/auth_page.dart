@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
 import 'package:flutter_todo/widgets/helpers/error_dialog.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
@@ -98,7 +99,7 @@ class _AuthPageState extends State<AuthPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Todo'),
+        title: Text(Configure.AppName),
       ),
       body: Container(
         padding: EdgeInsets.all(10.0),

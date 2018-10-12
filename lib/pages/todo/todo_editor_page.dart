@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/models/todo.dart';
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
@@ -38,7 +39,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
 
   Widget _buildAppBar(AppModel model) {
     return AppBar(
-      title: Text('Todo'),
+      title: Text(Configure.AppName),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.lock),
