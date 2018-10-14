@@ -42,6 +42,22 @@ class _TodoListPageState extends State<TodoListPage> {
             }
           },
         ),
+        PopupMenuButton<String>(
+          onSelected: (String choice) {
+            switch (choice) {
+              case 'Settings':
+                Navigator.pushNamed(context, '/settings');
+            }
+          },
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem<String>(
+                value: 'Settings',
+                child: Text('Settings'),
+              )
+            ];
+          },
+        ),
       ],
     );
   }
