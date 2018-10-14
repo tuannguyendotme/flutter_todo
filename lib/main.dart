@@ -52,7 +52,7 @@ class _TodoAppState extends State<TodoApp> {
           '/register': (BuildContext context) =>
               _isAuthenticated ? TodoListPage(_model) : RegisterPage(),
           '/settings': (BuildContext context) =>
-              _isAuthenticated ? SettingsPage() : AuthPage(),
+              _isAuthenticated ? SettingsPage(_model) : AuthPage(),
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(

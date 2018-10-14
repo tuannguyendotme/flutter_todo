@@ -11,6 +11,7 @@ import 'package:flutter_todo/models/user.dart';
 import 'package:flutter_todo/models/filter.dart';
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/models/todo.dart';
+import 'package:flutter_todo/models/settings.dart';
 import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 
 class CoreModel extends Model {
@@ -58,7 +59,7 @@ class TodosModel extends CoreModel {
     _todo = todo;
   }
 
-  Future<Null> fetchTodos() async {
+  Future fetchTodos() async {
     _isLoading = true;
     notifyListeners();
 
@@ -483,5 +484,45 @@ class UserModel extends CoreModel {
 
   void setAuthTimeout(int time) {
     _authTimer = Timer(Duration(seconds: time), logout);
+  }
+}
+
+class SettingsModel extends CoreModel {
+  Settings _settings;
+
+  Settings get settings {
+    return _settings;
+  }
+
+  Future loadSettings() async {
+    _isLoading = true;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+
+    _settings = Settings(isShortcutsEnabled: _loadIsShortcutsEnabled(prefs));
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  bool _loadIsShortcutsEnabled(SharedPreferences prefs) {
+    return prefs.getKeys().contains('isShortcutsEnabled') &&
+            prefs.getBool('isShortcutsEnabled')
+        ? true
+        : false;
+  }
+
+  Future toggleIsShortcutEnabled() async {
+    _isLoading = true;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isShortcutsEnabled', !_loadIsShortcutsEnabled(prefs));
+
+    _settings = Settings(isShortcutsEnabled: _loadIsShortcutsEnabled(prefs));
+
+    _isLoading = false;
+    notifyListeners();
   }
 }
