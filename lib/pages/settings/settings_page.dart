@@ -21,7 +21,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   Widget _buildAppBar(BuildContext context, AppModel model) {
     return AppBar(
-      title: Text(Configure.AppName),
+      title: Text('Settings'),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.lock),
