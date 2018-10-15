@@ -19,13 +19,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  @override
-  void initState() {
-    widget.model.loadSettings();
-
-    super.initState();
-  }
-
   Widget _buildAppBar(BuildContext context, AppModel model) {
     return AppBar(
       title: Text(Configure.AppName),

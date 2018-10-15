@@ -25,6 +25,7 @@ class _TodoAppState extends State<TodoApp> {
 
   @override
   void initState() {
+    _model.loadSettings();
     _model.autoAuthentication();
     _model.userSubject.listen((bool isAuthenticated) {
       setState(() {

@@ -4,10 +4,11 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/models/filter.dart';
+import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/widgets/helpers/confirm_dialog.dart';
 import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
 import 'package:flutter_todo/widgets/todo/todo_list_view.dart';
-import 'package:flutter_todo/scoped_models/app_model.dart';
+import 'package:flutter_todo/pages/todo/shortcuts_enabled_todo_fab.dart';
 
 class TodoListPage extends StatefulWidget {
   final AppModel model;
@@ -63,14 +64,18 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   Widget _buildFloatingActionButton(AppModel model) {
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: () {
-        model.setCurrentTodo(null);
+    if (model.settings.isShortcutsEnabled) {
+      return ShortcutsEnabledTodoFab(model);
+    } else {
+      return FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          model.setCurrentTodo(null);
 
-        Navigator.pushNamed(context, '/editor');
-      },
-    );
+          Navigator.pushNamed(context, '/editor');
+        },
+      );
+    }
   }
 
   Widget _buildAllFlatButton(AppModel model) {
@@ -158,13 +163,13 @@ class _TodoListPageState extends State<TodoListPage> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          SizedBox(),
+          // SizedBox(),
           _buildAllFlatButton(model),
           _buildDoneFlatButton(model),
           _buildNotDoneFlatButton(model),
-          SizedBox(
-            width: 80.0,
-          ),
+          // SizedBox(
+          //   width: 80.0,
+          // ),
         ],
       ),
       color: Colors.blue,
@@ -175,7 +180,7 @@ class _TodoListPageState extends State<TodoListPage> {
   Widget _buildPageContent(AppModel model) {
     return Scaffold(
       appBar: _buildAppBar(model),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: _buildFloatingActionButton(model),
       bottomNavigationBar: _buildBottomAppBar(model),
       body: Center(
