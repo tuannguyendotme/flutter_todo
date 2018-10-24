@@ -10,9 +10,18 @@ import 'package:flutter_todo/pages/auth/auth_page.dart';
 import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
 import 'package:flutter_todo/pages/todo/todo_list_page.dart';
 
-void main() => runApp(TodoApp());
+void main() async {
+  final AppModel model = AppModel();
+  await model.loadSettings();
+
+  runApp(TodoApp(model));
+}
 
 class TodoApp extends StatefulWidget {
+  final AppModel model;
+
+  TodoApp(this.model);
+
   @override
   State<StatefulWidget> createState() {
     return _TodoAppState();
@@ -20,12 +29,13 @@ class TodoApp extends StatefulWidget {
 }
 
 class _TodoAppState extends State<TodoApp> {
-  final AppModel _model = AppModel();
+  AppModel _model;
   bool _isAuthenticated = false;
 
   @override
   void initState() {
-    _model.loadSettings();
+    _model = widget.model;
+
     _model.autoAuthentication();
     _model.userSubject.listen((bool isAuthenticated) {
       setState(() {
@@ -42,6 +52,7 @@ class _TodoAppState extends State<TodoApp> {
       model: _model,
       child: MaterialApp(
         title: Configure.AppName,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           accentColor: Colors.blue,
           brightness: _model.settings.isDarkThemeUsed

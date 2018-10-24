@@ -61,8 +61,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   onChanged: (value) {
                     model.toggleIsDarkThemeUsed();
 
-                    print('Theme changed');
-
                     MessageDialog.show(
                       context,
                       title: 'Information',
