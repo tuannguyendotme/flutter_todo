@@ -32,6 +32,7 @@ class _TodoListPageState extends State<TodoListPage> {
   Widget _buildAppBar(AppModel model) {
     return AppBar(
       title: Text(Configure.AppName),
+      backgroundColor: Colors.blue,
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.lock),

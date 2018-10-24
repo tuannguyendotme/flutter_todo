@@ -500,7 +500,10 @@ class SettingsModel extends CoreModel {
 
     final prefs = await SharedPreferences.getInstance();
 
-    _settings = Settings(isShortcutsEnabled: _loadIsShortcutsEnabled(prefs));
+    _settings = Settings(
+      isShortcutsEnabled: _loadIsShortcutsEnabled(prefs),
+      isDarkThemeUsed: _loadIsDarkThemeUsed(prefs),
+    );
 
     _isLoading = false;
     notifyListeners();
@@ -513,6 +516,13 @@ class SettingsModel extends CoreModel {
         : false;
   }
 
+  bool _loadIsDarkThemeUsed(SharedPreferences prefs) {
+    return prefs.getKeys().contains('isDarkThemeUsed') &&
+            prefs.getBool('isDarkThemeUsed')
+        ? true
+        : false;
+  }
+
   Future toggleIsShortcutEnabled() async {
     _isLoading = true;
     notifyListeners();
@@ -520,7 +530,26 @@ class SettingsModel extends CoreModel {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isShortcutsEnabled', !_loadIsShortcutsEnabled(prefs));
 
-    _settings = Settings(isShortcutsEnabled: _loadIsShortcutsEnabled(prefs));
+    _settings = Settings(
+      isShortcutsEnabled: _loadIsShortcutsEnabled(prefs),
+      isDarkThemeUsed: _loadIsDarkThemeUsed(prefs),
+    );
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future toggleIsDarkThemeUsed() async {
+    _isLoading = true;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isDarkThemeUsed', !_loadIsDarkThemeUsed(prefs));
+
+    _settings = Settings(
+      isShortcutsEnabled: _loadIsShortcutsEnabled(prefs),
+      isDarkThemeUsed: _loadIsDarkThemeUsed(prefs),
+    );
 
     _isLoading = false;
     notifyListeners();

@@ -4,7 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
-import 'package:flutter_todo/widgets/helpers/error_dialog.dart';
+import 'package:flutter_todo/widgets/helpers/message_dialog.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/widgets/ui_elements/rounded_button.dart';
 
@@ -35,7 +35,7 @@ class _AuthPageState extends State<AuthPage> {
 
     if (authResult['success']) {
     } else {
-      ErrorDialog.show(context, authResult['message']);
+      MessageDialog.show(context, message: authResult['message']);
     }
   }
 
@@ -100,6 +100,7 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(Configure.AppName),
+        backgroundColor: Colors.blue,
       ),
       body: Container(
         padding: EdgeInsets.all(10.0),

@@ -6,7 +6,7 @@ import 'package:flutter_todo/.env.dart';
 import 'package:flutter_todo/models/todo.dart';
 import 'package:flutter_todo/models/priority.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
-import 'package:flutter_todo/widgets/helpers/error_dialog.dart';
+import 'package:flutter_todo/widgets/helpers/message_dialog.dart';
 import 'package:flutter_todo/widgets/helpers/confirm_dialog.dart';
 import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
 import 'package:flutter_todo/widgets/form_inputs/toggle_button.dart';
@@ -40,6 +40,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   Widget _buildAppBar(AppModel model) {
     return AppBar(
       title: Text(Configure.AppName),
+      backgroundColor: Colors.blue,
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.lock),
@@ -81,7 +82,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
 
               Navigator.pop(context);
             } else {
-              ErrorDialog.show(context);
+              MessageDialog.show(context);
             }
           });
         } else {
@@ -96,7 +97,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
             if (success) {
               Navigator.pop(context);
             } else {
-              ErrorDialog.show(context);
+              MessageDialog.show(context);
             }
           });
         }

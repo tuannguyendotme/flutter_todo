@@ -43,7 +43,10 @@ class _TodoAppState extends State<TodoApp> {
       child: MaterialApp(
         title: Configure.AppName,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          accentColor: Colors.blue,
+          brightness: _model.settings.isDarkThemeUsed
+              ? Brightness.dark
+              : Brightness.light,
         ),
         routes: {
           '/': (BuildContext context) =>

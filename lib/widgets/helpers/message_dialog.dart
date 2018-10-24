@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ErrorDialog {
-  static void show(BuildContext context, [String message]) {
+class MessageDialog {
+  static void show(
+    BuildContext context, {
+    String title = 'Something went wrong',
+    String message = 'Please try again!',
+  }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Something went wrong'),
-          content: Text(message != null ? message : 'Please try again!'),
+          title: Text(title),
+          content: Text(message),
           actions: <Widget>[
             FlatButton(
               onPressed: () => Navigator.of(context).pop(),
