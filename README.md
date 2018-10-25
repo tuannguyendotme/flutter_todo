@@ -11,7 +11,7 @@ Features:
 - Create/edit todo
 - Delete todo by swipping
 - Mark done/not done in list
-- Filter todos by state (all/done/not done)
+- Filter todo list by state (all/done/not done)
 - Change theme (light to dark and vice versa) at runtime
 - Enable shortcuts to create todo
 - Login/logout
