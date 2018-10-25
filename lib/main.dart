@@ -31,15 +31,25 @@ class TodoApp extends StatefulWidget {
 class _TodoAppState extends State<TodoApp> {
   AppModel _model;
   bool _isAuthenticated = false;
+  bool _isDarkThemeUsed = false;
 
   @override
   void initState() {
     _model = widget.model;
 
+    _isDarkThemeUsed = _model.settings.isDarkThemeUsed;
+
     _model.autoAuthentication();
+
     _model.userSubject.listen((bool isAuthenticated) {
       setState(() {
         _isAuthenticated = isAuthenticated;
+      });
+    });
+
+    _model.themeSubject.listen((bool isDarkThemeUsed) {
+      setState(() {
+        _isDarkThemeUsed = isDarkThemeUsed;
       });
     });
 
@@ -55,9 +65,7 @@ class _TodoAppState extends State<TodoApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           accentColor: Colors.blue,
-          brightness: _model.settings.isDarkThemeUsed
-              ? Brightness.dark
-              : Brightness.light,
+          brightness: _isDarkThemeUsed ? Brightness.dark : Brightness.light,
         ),
         routes: {
           '/': (BuildContext context) =>

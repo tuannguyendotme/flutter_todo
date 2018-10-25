@@ -489,9 +489,14 @@ class UserModel extends CoreModel {
 
 class SettingsModel extends CoreModel {
   Settings _settings;
+  PublishSubject<bool> _themeSubject = PublishSubject();
 
   Settings get settings {
     return _settings;
+  }
+
+  PublishSubject<bool> get themeSubject {
+    return _themeSubject;
   }
 
   Future loadSettings() async {
@@ -544,7 +549,10 @@ class SettingsModel extends CoreModel {
     notifyListeners();
 
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isDarkThemeUsed', !_loadIsDarkThemeUsed(prefs));
+    final isDarkThemeUsed = !_loadIsDarkThemeUsed(prefs);
+    prefs.setBool('isDarkThemeUsed', isDarkThemeUsed);
+
+    themeSubject.add(isDarkThemeUsed);
 
     _settings = Settings(
       isShortcutsEnabled: _loadIsShortcutsEnabled(prefs),

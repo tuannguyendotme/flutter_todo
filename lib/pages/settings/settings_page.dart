@@ -60,12 +60,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   value: model.settings.isDarkThemeUsed,
                   onChanged: (value) {
                     model.toggleIsDarkThemeUsed();
-
-                    MessageDialog.show(
-                      context,
-                      title: 'Information',
-                      message: 'Please restart the app to apply new theme.',
-                    );
                   },
                   title: Text('Use dark theme'),
                 )
