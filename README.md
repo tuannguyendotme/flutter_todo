@@ -15,6 +15,7 @@ Features:
 - Change theme (light to dark and vice versa) at runtime
 - Enable shortcuts to create todo
 - Login/logout
+- Register new account
 
 ![List](list.png?raw=true)
 ![Editor](editor.png?raw=true)
