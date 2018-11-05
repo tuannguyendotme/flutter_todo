@@ -8,7 +8,7 @@ import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/widgets/helpers/confirm_dialog.dart';
 import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
 import 'package:flutter_todo/widgets/todo/todo_list_view.dart';
-import 'package:flutter_todo/pages/todo/shortcuts_enabled_todo_fab.dart';
+import 'package:flutter_todo/widgets/todo/shortcuts_enabled_todo_fab.dart';
 
 class TodoListPage extends StatefulWidget {
   final AppModel model;

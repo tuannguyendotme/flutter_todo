@@ -47,7 +47,11 @@ class TodoCard extends StatelessWidget {
                   padding: EdgeInsets.all(10.0),
                   child: Text(
                     todo.title,
-                    style: TextStyle(fontSize: 24.0),
+                    style: TextStyle(
+                        fontSize: 24.0,
+                        decoration: todo.isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none),
                   ),
                 ),
               ),
