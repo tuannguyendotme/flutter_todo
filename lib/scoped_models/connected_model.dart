@@ -14,7 +14,7 @@ import 'package:flutter_todo/models/todo.dart';
 import 'package:flutter_todo/models/settings.dart';
 import 'package:flutter_todo/widgets/helpers/priority_helper.dart';
 
-class CoreModel extends Model {
+mixin CoreModel on Model {
   List<Todo> _todos = [];
   Todo _todo;
   bool _isLoading = false;
@@ -22,7 +22,7 @@ class CoreModel extends Model {
   User _user;
 }
 
-class TodosModel extends CoreModel {
+mixin TodosModel on CoreModel {
   List<Todo> get todos {
     switch (_filter) {
       case Filter.All:
@@ -287,7 +287,7 @@ class TodosModel extends CoreModel {
   }
 }
 
-class UserModel extends CoreModel {
+mixin UserModel on CoreModel {
   Timer _authTimer;
   PublishSubject<bool> _userSubject = PublishSubject();
 
@@ -487,7 +487,7 @@ class UserModel extends CoreModel {
   }
 }
 
-class SettingsModel extends CoreModel {
+mixin SettingsModel on CoreModel {
   Settings _settings;
   PublishSubject<bool> _themeSubject = PublishSubject();
 
@@ -552,7 +552,7 @@ class SettingsModel extends CoreModel {
     final isDarkThemeUsed = !_loadIsDarkThemeUsed(prefs);
     prefs.setBool('isDarkThemeUsed', isDarkThemeUsed);
 
-    themeSubject.add(isDarkThemeUsed);
+    _themeSubject.add(isDarkThemeUsed);
 
     _settings = Settings(
       isShortcutsEnabled: _loadIsShortcutsEnabled(prefs),

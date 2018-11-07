@@ -5,7 +5,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
 import 'package:flutter_todo/widgets/helpers/confirm_dialog.dart';
-import 'package:flutter_todo/widgets/helpers/message_dialog.dart';
 
 class SettingsPage extends StatefulWidget {
   final AppModel model;
