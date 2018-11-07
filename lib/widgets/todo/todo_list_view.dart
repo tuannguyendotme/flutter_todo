@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_todo/models/filter.dart';
 
 import 'package:scoped_model/scoped_model.dart';
@@ -13,19 +14,45 @@ class TodoListView extends StatelessWidget {
 
     switch (model.filter) {
       case Filter.All:
-        emptyText = 'There are no todo yet. Please create one.';
+        emptyText = 'This is boring here. \r\nCreate a todo to make it crowd.';
         break;
 
       case Filter.Done:
-        emptyText = 'There are no Done todo yet. Please create one.';
+        emptyText =
+            'This is boring here. \r\nCreate a Done todo to make it crowd.';
         break;
 
       case Filter.NotDone:
-        emptyText = 'There are no Not Done todo yet. Please create one.';
+        emptyText =
+            'This is boring here. \r\nCreate a Not Done todo to make it crowd.';
         break;
     }
 
-    return Text(emptyText);
+    Widget svg = new SvgPicture.asset(
+      'assets/todo_list.svg',
+      width: 200,
+    );
+
+    return Container(
+      color: Color.fromARGB(16, 0, 0, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          svg,
+          SizedBox(
+            height: 40.0,
+          ),
+          Text(
+            emptyText,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildListView(AppModel model) {
@@ -52,9 +79,7 @@ class TodoListView extends StatelessWidget {
       builder: (BuildContext context, Widget child, AppModel model) {
         Widget todoCards = model.todos.length > 0
             ? _buildListView(model)
-            : Center(
-                child: _buildEmptyText(model),
-              );
+            : _buildEmptyText(model);
 
         return todoCards;
       },

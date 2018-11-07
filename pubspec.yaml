@@ -10,7 +10,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: '>=2.0.0-dev.68.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -22,6 +22,7 @@ dependencies:
   scoped_model: ^0.3.0
   shared_preferences: ^0.4.3
   rxdart: ^0.18.1
+  flutter_svg: ^0.6.3
 
 dev_dependencies:
   flutter_test:
@@ -37,8 +38,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
+  assets:
+    - assets/todo_list.svg
   #  - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

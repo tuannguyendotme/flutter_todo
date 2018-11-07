@@ -184,9 +184,7 @@ class _TodoListPageState extends State<TodoListPage> {
       // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: _buildFloatingActionButton(model),
       bottomNavigationBar: _buildBottomAppBar(model),
-      body: Center(
-        child: TodoListView(),
-      ),
+      body: TodoListView(),
     );
   }
 
