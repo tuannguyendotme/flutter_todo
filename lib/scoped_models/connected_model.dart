@@ -337,6 +337,7 @@ mixin UserModel on CoreModel {
         prefs.setString('userId', responseData['localId']);
         prefs.setString('email', responseData['email']);
         prefs.setString('token', responseData['idToken']);
+        prefs.setString('refreshToken', responseData['refreshToken']);
         prefs.setString('expiryTime', expiryTime.toIso8601String());
 
         _userSubject.add(true);
@@ -405,6 +406,7 @@ mixin UserModel on CoreModel {
         prefs.setString('userId', responseData['localId']);
         prefs.setString('email', responseData['email']);
         prefs.setString('token', responseData['idToken']);
+        prefs.setString('refreshToken', responseData['refreshToken']);
         prefs.setString('expiryTime', expiryTime.toIso8601String());
 
         _userSubject.add(true);
@@ -464,6 +466,7 @@ mixin UserModel on CoreModel {
       if (parsedExpiryTime.isBefore(now)) {
         _user = null;
         notifyListeners();
+
         return;
       }
 
@@ -482,8 +485,52 @@ mixin UserModel on CoreModel {
     }
   }
 
+  void tryRefreshToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString('refreshToken');
+
+    final Map<String, dynamic> formData = {
+      'grant_type': 'refresh_token',
+      'refresh_token': refreshToken
+    };
+
+    try {
+      final http.Response response = await http.post(
+        'https://securetoken.googleapis.com/v1/token?key=${Configure.ApiKey}',
+        body: json.encode(formData),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (responseData.containsKey('id_token')) {
+        _user = User(
+          id: prefs.getString('userId'),
+          email: prefs.getString('email'),
+          token: responseData['id_token'],
+        );
+
+        setAuthTimeout(int.parse(responseData['expires_in']));
+
+        final DateTime now = DateTime.now();
+        final DateTime expiryTime =
+            now.add(Duration(seconds: int.parse(responseData['expires_in'])));
+
+        prefs.setString('token', responseData['id_token']);
+        prefs.setString('expiryTime', expiryTime.toIso8601String());
+        prefs.setString('refreshToken', responseData['refresh_token']);
+
+        print('tryRefreshToken');
+
+        return;
+      }
+    } catch (error) {}
+
+    logout();
+  }
+
   void setAuthTimeout(int time) {
-    _authTimer = Timer(Duration(seconds: time), logout);
+    _authTimer = Timer(Duration(seconds: time), tryRefreshToken);
   }
 }
 
