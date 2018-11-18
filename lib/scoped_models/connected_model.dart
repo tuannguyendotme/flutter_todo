@@ -465,7 +465,6 @@ mixin UserModel on CoreModel {
 
       if (parsedExpiryTime.isBefore(now)) {
         _user = null;
-        notifyListeners();
 
         return;
       }
@@ -480,8 +479,6 @@ mixin UserModel on CoreModel {
       setAuthTimeout(tokenLifespan);
 
       _userSubject.add(true);
-
-      notifyListeners();
     }
   }
 
@@ -547,18 +544,15 @@ mixin SettingsModel on CoreModel {
   }
 
   Future loadSettings() async {
-    _isLoading = true;
-    notifyListeners();
-
     final prefs = await SharedPreferences.getInstance();
+    final isDarkThemeUsed = _loadIsDarkThemeUsed(prefs);
 
     _settings = Settings(
       isShortcutsEnabled: _loadIsShortcutsEnabled(prefs),
-      isDarkThemeUsed: _loadIsDarkThemeUsed(prefs),
+      isDarkThemeUsed: isDarkThemeUsed,
     );
 
-    _isLoading = false;
-    notifyListeners();
+    _themeSubject.add(isDarkThemeUsed);
   }
 
   bool _loadIsShortcutsEnabled(SharedPreferences prefs) {

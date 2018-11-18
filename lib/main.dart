@@ -11,17 +11,10 @@ import 'package:flutter_todo/pages/todo/todo_editor_page.dart';
 import 'package:flutter_todo/pages/todo/todo_list_page.dart';
 
 void main() async {
-  final AppModel model = AppModel();
-  await model.loadSettings();
-
-  runApp(TodoApp(model));
+  runApp(TodoApp());
 }
 
 class TodoApp extends StatefulWidget {
-  final AppModel model;
-
-  TodoApp(this.model);
-
   @override
   State<StatefulWidget> createState() {
     return _TodoAppState();
@@ -35,10 +28,9 @@ class _TodoAppState extends State<TodoApp> {
 
   @override
   void initState() {
-    _model = widget.model;
+    _model = AppModel();
 
-    _isDarkThemeUsed = _model.settings.isDarkThemeUsed;
-
+    _model.loadSettings();
     _model.autoAuthentication();
 
     _model.userSubject.listen((bool isAuthenticated) {
