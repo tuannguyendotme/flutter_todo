@@ -543,7 +543,7 @@ mixin SettingsModel on CoreModel {
     return _themeSubject;
   }
 
-  Future loadSettings() async {
+  void loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final isDarkThemeUsed = _loadIsDarkThemeUsed(prefs);
 

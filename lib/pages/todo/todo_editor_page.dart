@@ -9,8 +9,8 @@ import 'package:flutter_todo/scoped_models/app_model.dart';
 import 'package:flutter_todo/widgets/helpers/message_dialog.dart';
 import 'package:flutter_todo/widgets/helpers/confirm_dialog.dart';
 import 'package:flutter_todo/widgets/ui_elements/loading_modal.dart';
-import 'package:flutter_todo/widgets/form_inputs/toggle_button.dart';
-import 'package:flutter_todo/widgets/form_inputs/priority_selector.dart';
+import 'package:flutter_todo/widgets/form_fields/priority_form_field.dart';
+import 'package:flutter_todo/widgets/form_fields/toggle_form_field.dart';
 
 class TodoEditorPage extends StatefulWidget {
   @override
@@ -26,16 +26,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     'priority': Priority.Low,
     'isDone': false
   };
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  _selectPriority(Priority priority) {
-    _formData['priority'] = priority;
-  }
-
-  _toggleDone(bool isDone) {
-    _formData['isDone'] = isDone;
-  }
 
   Widget _buildAppBar(AppModel model) {
     return AppBar(
@@ -132,15 +123,23 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   }
 
   Widget _buildOthers(Todo todo) {
-    bool isDone = todo != null && todo.isDone;
+    final bool isDone = todo != null && todo.isDone;
+    final Priority priority = todo != null ? todo.priority : Priority.Low;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        ToggleButton(isDone, _toggleDone),
-        PrioritySelector(
-          todo != null ? todo.priority : Priority.Low,
-          _selectPriority,
+        ToggleFormField(
+          initialValue: isDone,
+          onSaved: (bool value) {
+            _formData['isDone'] = value;
+          },
+        ),
+        PriorityFormField(
+          initialValue: priority,
+          onSaved: (Priority value) {
+            _formData['priority'] = value;
+          },
         ),
       ],
     );
