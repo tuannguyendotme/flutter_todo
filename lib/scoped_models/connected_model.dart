@@ -517,8 +517,6 @@ mixin UserModel on CoreModel {
         prefs.setString('expiryTime', expiryTime.toIso8601String());
         prefs.setString('refreshToken', responseData['refresh_token']);
 
-        print('tryRefreshToken');
-
         return;
       }
     } catch (error) {}
