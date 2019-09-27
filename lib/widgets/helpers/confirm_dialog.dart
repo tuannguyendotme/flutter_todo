@@ -8,6 +8,7 @@ class ConfirmDialog {
   static Future<bool> show(BuildContext context, [String title]) async {
     return await showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           title: Text(title != null ? title : 'Are you sure to logout?'),
