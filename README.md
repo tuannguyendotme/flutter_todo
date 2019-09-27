@@ -24,7 +24,7 @@ Features:
 
 To get start, run below command in Terminal
 
-```
+```bash
 cp .env.example.dart .env.dart
 ```
 
