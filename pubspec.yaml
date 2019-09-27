@@ -20,10 +20,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   http:
   cupertino_icons: ^0.1.2
-  scoped_model:
-  shared_preferences:
-  rxdart:
-  flutter_svg:
+  scoped_model: ^1.0.1
+  shared_preferences: ^0.5.3+4
+  rxdart: ^0.22.2
+  flutter_svg: ^0.14.1
 
 dev_dependencies:
   flutter_test:

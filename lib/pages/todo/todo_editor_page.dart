@@ -104,6 +104,8 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
         if (value.isEmpty) {
           return 'Please enter todo\'s title';
         }
+
+        return null;
       },
       onSaved: (value) {
         _formData['title'] = value;
